@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>متابع الحفظ والمراجعة</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080c09;
+  --surface: #0f1510;
+  --card: #131a14;
+  --card2: #171f18;
+  --border: #1c2a1e;
+  --border2: #243228;
+  --gold: #c9a84c;
+  --gold-light: #e8c97a;
+  --gold-dim: #6b5422;
+  --gold-bg: #1a1408;
+  --green: #2d6a4f;
+  --green-light: #52b788;
+  --green-dim: #152a20;
+  --purple: #7c6fcd;
+  --purple-dim: #2a2448;
+  --text: #e2ddd4;
+  --text-muted: #7a7670;
+  --text-dim: #3e3c38;
+  --accent: #40916c;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Cairo', sans-serif;
+  min-height: 100vh;
+  background-image:
+    radial-gradient(ellipse at 15% 10%, rgba(45,106,79,0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 90%, rgba(201,168,76,0.06) 0%, transparent 50%);
+}
+
+/* HEADER */
+.header {
+  text-align: center;
+  padding: 40px 24px 28px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+.header::after {
+  content:'';
+  position:absolute; bottom:-1px; left:50%; transform:translateX(-50%);
+  width:160px; height:2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.basmala { font-family:'Amiri',serif; font-size:26px; color:var(--gold); margin-bottom:8px; }
+.app-title { font-size:12px; color:var(--text-muted); letter-spacing:3px; font-weight:300; }
+
+.container { max-width:820px; margin:0 auto; padding:28px 16px 80px; }
+
+/* STAGE BANNER */
+.stage-banner {
+  background: linear-gradient(135deg, var(--gold-bg), var(--green-dim));
+  border: 1px solid var(--gold-dim);
+  border-radius: 14px;
+  padding: 18px 22px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.stage-badge {
+  background: var(--gold-dim);
+  color: var(--gold-light);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.stage-info { flex:1; }
+.stage-name { font-size:16px; font-weight:700; color:var(--gold-light); margin-bottom:3px; }
+.stage-range { font-size:11px; color:var(--text-muted); }
+.stage-ward {
+  text-align: left;
+  white-space: nowrap;
+}
+.stage-ward-num { font-family:'Amiri',serif; font-size:28px; color:var(--gold); line-height:1; }
+.stage-ward-label { font-size:10px; color:var(--text-muted); }
+
+/* STATS ROW */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 12px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.stat-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+}
+.stat-card.g::before { background: linear-gradient(90deg, transparent, var(--green), transparent); }
+.stat-num { font-size:26px; font-weight:700; color:var(--gold); font-family:'Amiri',serif; line-height:1; margin-bottom:5px; }
+.stat-card.g .stat-num { color:var(--green-light); }
+.stat-label { font-size:10px; color:var(--text-muted); font-weight:300; }
+
+/* PROGRESS */
+.progress-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 22px;
+  margin-bottom: 20px;
+}
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.progress-label { font-size:12px; color:var(--text-muted); }
+.progress-pct { font-size:13px; font-weight:700; color:var(--gold); }
+.progress-bar-bg {
+  background: var(--green-dim);
+  border-radius: 6px; height: 8px; overflow:hidden; margin-bottom:8px;
+}
+.progress-bar-fill {
+  height:100%;
+  background: linear-gradient(90deg, var(--green), var(--green-light));
+  border-radius:6px;
+  transition: width 0.7s cubic-bezier(.4,0,.2,1);
+}
+.progress-sub {
+  display:flex; justify-content:space-between;
+  font-size:11px; color:var(--text-dim);
+}
+
+/* CONTROLS */
+.section-label {
+  font-size:10px; letter-spacing:2.5px; color:var(--text-dim);
+  text-transform:uppercase; margin-bottom:10px; padding-right:2px;
+}
+.controls-row {
+  display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px;
+}
+.ctrl-box {
+  background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px;
+}
+.ctrl-label { font-size:11px; color:var(--text-muted); margin-bottom:10px; display:block; }
+.num-row { display:flex; align-items:center; gap:8px; }
+.nb {
+  width:34px; height:34px; border-radius:8px;
+  border:1px solid var(--border2); background:var(--surface);
+  color:var(--gold); font-size:20px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition:all .15s; flex-shrink:0; font-family:'Cairo',sans-serif;
+}
+.nb:hover { background:var(--green-dim); border-color:var(--green); }
+.nv {
+  font-size:24px; font-weight:700; color:var(--text);
+  font-family:'Amiri',serif; flex:1; text-align:center;
+}
+
+/* WEEK GRID */
+.week-grid {
+  display:grid; grid-template-columns:repeat(7,1fr); gap:8px; margin-bottom:20px;
+}
+.day-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:10px; padding:10px 5px; text-align:center;
+  cursor:pointer; transition:all .2s; position:relative; user-select:none;
+}
+.day-card.hifz  { border-color:var(--gold-dim); }
+.day-card.sama3 { border-color:var(--green); }
+.day-card.sheikh { border-color:var(--purple-dim); }
+.day-card.active.hifz  { background:var(--gold-bg); }
+.day-card.active.sama3 { background:var(--green-dim); }
+.day-card.done { opacity:.45; }
+.day-card.done::after {
+  content:'✓'; position:absolute; top:3px; left:5px;
+  font-size:9px; color:var(--green-light);
+}
+.day-name { font-size:9px; color:var(--text-muted); margin-bottom:4px; }
+.day-tag { font-size:8px; font-weight:700; padding:2px 0; }
+.day-card.hifz .day-tag  { color:var(--gold); }
+.day-card.sama3 .day-tag { color:var(--green-light); }
+.day-card.sheikh .day-tag { color:var(--purple); }
+.day-sub { font-size:8px; color:var(--text-dim); margin-top:3px; line-height:1.3; }
+
+/* REVIEW CARD */
+.review-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:14px; padding:22px; margin-bottom:20px;
+}
+.review-top {
+  display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;
+}
+.review-title { font-size:13px; color:var(--text-muted); }
+.review-stage-tag {
+  font-size:10px; background:var(--green-dim); border:1px solid var(--green);
+  color:var(--green-light); padding:4px 10px; border-radius:20px;
+}
+.review-pages {
+  display:grid; grid-template-columns:1fr auto 1fr; gap:12px;
+  align-items:center; margin-bottom:18px;
+}
+.rp-box {
+  background:var(--surface); border-radius:10px; padding:14px;
+  text-align:center;
+}
+.rp-num { font-family:'Amiri',serif; font-size:30px; color:var(--accent); line-height:1; }
+.rp-label { font-size:10px; color:var(--text-dim); margin-top:3px; }
+.rp-arrow { font-size:20px; color:var(--text-dim); text-align:center; }
+.mark-btn {
+  width:100%; padding:13px;
+  background: linear-gradient(135deg, var(--green-dim), #0a1f16);
+  border:1px solid var(--green); border-radius:10px;
+  color:var(--green-light); font-family:'Cairo',sans-serif;
+  font-size:13px; font-weight:700; cursor:pointer; transition:all .2s;
+}
+.mark-btn:hover { background:linear-gradient(135deg, var(--green), #1a4a35); color:#fff; }
+
+/* RULES */
+.rules-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:14px; padding:20px; margin-bottom:20px;
+}
+.rule-item {
+  display:flex; gap:10px; padding:8px 0;
+  border-bottom:1px solid var(--border); align-items:flex-start;
+}
+.rule-item:last-child { border-bottom:none; }
+.rule-dot {
+  width:6px; height:6px; border-radius:50%;
+  background:var(--gold-dim); flex-shrink:0; margin-top:6px;
+}
+.rule-text { font-size:12px; color:var(--text-muted); line-height:1.7; }
+
+/* MILESTONES */
+.stages-list {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:14px; overflow:hidden; margin-bottom:20px;
+}
+.stage-row {
+  display:grid; grid-template-columns:auto 1fr auto auto;
+  gap:12px; align-items:center;
+  padding:12px 18px; border-bottom:1px solid var(--border);
+  transition:background .2s;
+}
+.stage-row:last-child { border-bottom:none; }
+.stage-row.done { opacity:.4; }
+.stage-row.current { background:var(--gold-bg); }
+.s-dot {
+  width:10px; height:10px; border-radius:50%;
+  background:var(--border2); flex-shrink:0;
+}
+.s-dot.done { background:var(--green-light); }
+.s-dot.current { background:var(--gold); box-shadow:0 0 8px var(--gold); }
+.s-name { font-size:12px; color:var(--text-muted); }
+.stage-row.current .s-name { color:var(--text); font-weight:600; }
+.s-ward { font-size:11px; color:var(--gold); font-family:'Amiri',serif; white-space:nowrap; }
+.s-range { font-size:10px; color:var(--text-dim); white-space:nowrap; }
+
+/* TOAST */
+.toast {
+  position:fixed; bottom:28px; left:50%;
+  transform:translateX(-50%) translateY(80px);
+  background:var(--green); color:#fff;
+  padding:11px 22px; border-radius:30px;
+  font-size:13px; font-weight:600;
+  transition:transform .3s cubic-bezier(.4,0,.2,1);
+  z-index:999; white-space:nowrap;
+}
+.toast.show { transform:translateX(-50%) translateY(0); }
+
+.divider { height:1px; background:linear-gradient(90deg,transparent,var(--border),transparent); margin:22px 0; }
+
+@media(max-width:520px){
+  .stats-row { grid-template-columns:repeat(2,1fr); }
+  .week-grid { grid-template-columns:repeat(4,1fr); }
+  .controls-row { grid-template-columns:1fr; }
+  .stage-banner { flex-direction:column; text-align:center; }
+  .stage-ward { text-align:center; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="basmala">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+  <div class="app-title">متابع الحفظ والمراجعة</div>
+</div>
+
+<div class="container">
+
+  <!-- Stage Banner -->
+  <div class="stage-banner" id="stage-banner">
+    <div>
+      <div class="stage-badge" id="s-badge">المرحلة الأولى</div>
+    </div>
+    <div class="stage-info">
+      <div class="stage-name" id="s-name">حتى ٢٠ صفحة</div>
+      <div class="stage-range" id="s-range">من صفحة ١ إلى ٢٠</div>
+    </div>
+    <div class="stage-ward">
+      <div class="stage-ward-num" id="s-ward-num">٣</div>
+      <div class="stage-ward-label">صفحات مراجعة / يوم</div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-num" id="stat-pages">16</div>
+      <div class="stat-label">صفحة محفوظة</div>
+    </div>
+    <div class="stat-card g">
+      <div class="stat-num" id="stat-juz">0.8</div>
+      <div class="stat-label">جزء مكتمل</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="stat-next">4</div>
+      <div class="stat-label">صفحات للمرحلة القادمة</div>
+    </div>
+    <div class="stat-card g">
+      <div class="stat-num" id="stat-cycle">1</div>
+      <div class="stat-label">أسبوع / دورة مراجعة</div>
+    </div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-card">
+    <div class="progress-header">
+      <div class="progress-label" id="prog-label">التقدم نحو المرحلة الثانية</div>
+      <div class="progress-pct" id="prog-pct">80%</div>
+    </div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="prog-fill" style="width:80%"></div>
+    </div>
+    <div class="progress-sub">
+      <span id="prog-left">صفحة 16</span>
+      <span id="prog-right">الهدف: 20 صفحة</span>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="section-label">تحديث بيانات الحفظ</div>
+  <div class="controls-row">
+    <div class="ctrl-box">
+      <label class="ctrl-label">الصفحة المحفوظة حالياً</label>
+      <div class="num-row">
+        <button class="nb" onclick="change('mem',-1)">−</button>
+        <div class="nv" id="v-mem">16</div>
+        <button class="nb" onclick="change('mem',1)">+</button>
+      </div>
+    </div>
+    <div class="ctrl-box">
+      <label class="ctrl-label">آخر صفحة راجعتها (بعد الفجر)</label>
+      <div class="num-row">
+        <button class="nb" onclick="change('rev',-1)">−</button>
+        <div class="nv" id="v-rev">1</div>
+        <button class="nb" onclick="change('rev',1)">+</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Review Card -->
+  <div class="section-label">ورد المراجعة — بعد الفجر اليوم</div>
+  <div class="review-card">
+    <div class="review-top">
+      <div class="review-title">اقرأ غيباً من صفحة ← إلى صفحة</div>
+      <div class="review-stage-tag" id="rev-tag">٣ صفحات / يوم</div>
+    </div>
+    <div class="review-pages">
+      <div class="rp-box">
+        <div class="rp-num" id="rev-from">1</div>
+        <div class="rp-label">من صفحة</div>
+      </div>
+      <div class="rp-arrow">←</div>
+      <div class="rp-box">
+        <div class="rp-num" id="rev-to">3</div>
+        <div class="rp-label">إلى صفحة</div>
+      </div>
+    </div>
+    <button class="mark-btn" onclick="markReview()">✓ سجّل مراجعة اليوم واضبط الموضع</button>
+  </div>
+
+  <!-- Week Schedule -->
+  <div class="section-label">جدول الأسبوع</div>
+  <div class="week-grid" id="week-grid"></div>
+
+  <div class="divider"></div>
+
+  <!-- All Stages -->
+  <div class="section-label">مراحل الخطة الكاملة</div>
+  <div class="stages-list" id="stages-list"></div>
+
+  <div class="divider"></div>
+
+  <!-- Rules -->
+  <div class="section-label">قواعد مهمة طوال الرحلة</div>
+  <div class="rules-card" id="rules-box"></div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── DATA FROM PDF ──────────────────────────────────────────────
+const STAGES = [
+  { num:1, label:'المرحلة الأولى',   range:'حتى ٢٠ صفحة',         maxPages:20,  dailyPages:3,   dailyLabel:'٣ صفحات' },
+  { num:2, label:'المرحلة الثانية',  range:'من جزء إلى جزئين',    maxPages:40,  dailyPages:5,   dailyLabel:'٥ صفحات' },
+  { num:3, label:'المرحلة الثالثة',  range:'حتى خمسة أجزاء',      maxPages:100, dailyPages:10,  dailyLabel:'١٠ صفحات' },
+  { num:4, label:'المرحلة الرابعة',  range:'حتى عشرة أجزاء',      maxPages:200, dailyPages:20,  dailyLabel:'جزء كامل' },
+  { num:5, label:'المرحلة الخامسة',  range:'بعد عشرة أجزاء',      maxPages:300, dailyPages:30,  dailyLabel:'جزء ونصف' },
+  { num:6, label:'المرحلة السادسة',  range:'بعد خمسة عشر جزءاً',  maxPages:400, dailyPages:40,  dailyLabel:'جزآن' },
+  { num:7, label:'المرحلة السابعة',  range:'بعد عشرين جزءاً',     maxPages:500, dailyPages:50,  dailyLabel:'جزآن ونصف' },
+  { num:8, label:'المرحلة الثامنة',  range:'حتى ختم القرآن',      maxPages:604, dailyPages:60,  dailyLabel:'ثلاثة أجزاء' },
+];
+
+const DAYS = [
+  { name:'الإثنين',  type:'hifz',   tag:'حفظ',    sub:'صفحة جديدة\nمراجعة فجر' },
+  { name:'الثلاثاء', type:'hifz',   tag:'حفظ',    sub:'صفحة جديدة\nمراجعة فجر' },
+  { name:'الأربعاء', type:'sama3',  tag:'سماع',   sub:'إث + ثلا\nمراجعة فجر' },
+  { name:'الخميس',   type:'hifz',   tag:'حفظ',    sub:'صفحة جديدة\nمراجعة فجر' },
+  { name:'الجمعة',   type:'hifz',   tag:'حفظ',    sub:'صفحة جديدة\nمراجعة فجر' },
+  { name:'السبت',    type:'sheikh', tag:'شيخ',    sub:'سرد شامل\nاختبار كامل' },
+  { name:'الأحد',    type:'sama3',  tag:'سماع',   sub:'خ + ج\nمراجعة فجر' },
+];
+
+const RULES = [
+  'أي صفحة جديدة لازم تراجع ثاني يوم، وبعد أسبوع، وبعد شهر.',
+  'لو بدأت المراجعة تضعف — لا تزود الحفظ.',
+  'الاستمرارية أهم من السرعة.',
+  'الحفظ الحقيقي يعتمد على التكرار المتباعد.',
+  'ركز على مواضع الضعف بدل إعادة الصفحة كاملة كل مرة.',
+];
+
+// ── STATE ──────────────────────────────────────────────────────
+let S = JSON.parse(localStorage.getItem('qtracker_v2') || 'null') || {
+  mem: 16,
+  rev: 1,
+  doneDays: [],
+  lastReset: '',
+};
+
+function save() { localStorage.setItem('qtracker_v2', JSON.stringify(S)); }
+
+function getStage(pages) {
+  return STAGES.find(s => pages <= s.maxPages) || STAGES[STAGES.length-1];
+}
+
+function toArabicNum(n) {
+  return String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
+}
+
+// ── RENDER ─────────────────────────────────────────────────────
+function render() {
+  const { mem, rev } = S;
+  const stage = getStage(mem);
+  const prevStageMax = STAGES[stage.num-2] ? STAGES[stage.num-2].maxPages : 0;
+  const nextStageMax = stage.maxPages;
+
+  // Stage banner
+  document.getElementById('s-badge').textContent = stage.label;
+  document.getElementById('s-name').textContent = stage.range;
+  document.getElementById('s-range').textContent = `من صفحة ${prevStageMax+1} إلى ${nextStageMax}`;
+  document.getElementById('s-ward-num').textContent = toArabicNum(stage.dailyPages);
+
+  // Stats
+  document.getElementById('stat-pages').textContent = mem;
+  document.getElementById('stat-juz').textContent = (mem/20).toFixed(1);
+  document.getElementById('stat-next').textContent = nextStageMax - mem;
+  const cycleDays = Math.ceil(mem / stage.dailyPages);
+  document.getElementById('stat-cycle').textContent = Math.ceil(cycleDays / 6);
+
+  // Progress
+  const pct = Math.round(((mem - prevStageMax) / (nextStageMax - prevStageMax)) * 100);
+  document.getElementById('prog-fill').style.width = Math.min(pct,100)+'%';
+  document.getElementById('prog-pct').textContent = pct+'%';
+  document.getElementById('prog-label').textContent = `التقدم نحو ${STAGES[stage.num] ? STAGES[stage.num].label : 'الختم'}`;
+  document.getElementById('prog-left').textContent = 'صفحة '+mem;
+  document.getElementById('prog-right').textContent = 'الهدف: '+nextStageMax+' صفحة';
+
+  // Input vals
+  document.getElementById('v-mem').textContent = mem;
+  document.getElementById('v-rev').textContent = rev;
+
+  // Review position
+  const revFrom = ((rev - 1) % mem) + 1;
+  const revTo   = Math.min(revFrom + stage.dailyPages - 1, mem);
+  document.getElementById('rev-from').textContent = revFrom;
+  document.getElementById('rev-to').textContent   = revTo;
+  document.getElementById('rev-tag').textContent  = stage.dailyLabel + ' / يوم';
+
+  // Week grid
+  const grid = document.getElementById('week-grid');
+  grid.innerHTML = '';
+  DAYS.forEach((d,i) => {
+    const el = document.createElement('div');
+    el.className = 'day-card '+d.type+(S.doneDays.includes(i)?' done':'');
+    el.innerHTML = `<div class="day-name">${d.name.slice(0,4)}</div><div class="day-tag">${d.tag}</div><div class="day-sub">${d.sub}</div>`;
+    el.onclick = () => { toggleDay(i); };
+    grid.appendChild(el);
+  });
+
+  // Stages list
+  const sl = document.getElementById('stages-list');
+  sl.innerHTML = '';
+  STAGES.forEach(st => {
+    const done    = mem >= st.maxPages;
+    const current = st.num === stage.num;
+    const row = document.createElement('div');
+    row.className = 'stage-row'+(done?' done':current?' current':'');
+    row.innerHTML = `
+      <div class="s-dot ${done?'done':current?'current':''}"></div>
+      <div class="s-name">${st.label} — ${st.range}</div>
+      <div class="s-ward">${st.dailyLabel}</div>
+      <div class="s-range">حتى ${toArabicNum(st.maxPages)} ص</div>
+    `;
+    sl.appendChild(row);
+  });
+
+  // Rules
+  const rb = document.getElementById('rules-box');
+  rb.innerHTML = '';
+  RULES.forEach(r => {
+    const el = document.createElement('div');
+    el.className = 'rule-item';
+    el.innerHTML = `<div class="rule-dot"></div><div class="rule-text">${r}</div>`;
+    rb.appendChild(el);
+  });
+}
+
+// ── ACTIONS ────────────────────────────────────────────────────
+function change(key, delta) {
+  if (key === 'mem') S.mem = Math.max(1, Math.min(604, S.mem + delta));
+  else               S.rev = Math.max(1, Math.min(S.mem, S.rev + delta));
+  save(); render();
+}
+
+function toggleDay(i) {
+  const idx = S.doneDays.indexOf(i);
+  if (idx > -1) S.doneDays.splice(idx,1);
+  else S.doneDays.push(i);
+  save(); render();
+}
+
+function markReview() {
+  const stage = getStage(S.mem);
+  S.rev = S.rev + stage.dailyPages;
+  if (S.rev > S.mem) S.rev = 1;
+  save(); render();
+  toast('✓ تم تسجيل مراجعة اليوم');
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+// Reset done days on Monday
+const todayStr = new Date().toDateString();
+if (S.lastReset !== todayStr && new Date().getDay() === 1) {
+  S.doneDays = [];
+  S.lastReset = todayStr;
+  save();
+}
+
+render();
+</script>
+</body>
+</html>
