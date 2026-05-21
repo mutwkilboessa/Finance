@@ -2,584 +2,626 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>متابع الحفظ والمراجعة</title>
-<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>الخطة المالية — أبوعيسى</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #080c09;
-  --surface: #0f1510;
-  --card: #131a14;
-  --card2: #171f18;
-  --border: #1c2a1e;
-  --border2: #243228;
-  --gold: #c9a84c;
-  --gold-light: #e8c97a;
-  --gold-dim: #6b5422;
-  --gold-bg: #1a1408;
-  --green: #2d6a4f;
-  --green-light: #52b788;
-  --green-dim: #152a20;
-  --purple: #7c6fcd;
-  --purple-dim: #2a2448;
-  --text: #e2ddd4;
-  --text-muted: #7a7670;
-  --text-dim: #3e3c38;
-  --accent: #40916c;
-}
-* { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --brand: #5C3317;
+    --accent: #C8622A;
+    --accent2: #E8834A;
+    --green: #1A5C2A;
+    --green-light: #2A8C42;
+    --red: #8C1A1A;
+    --bg: #F7F3EE;
+    --bg2: #EDE7DE;
+    --card: #FFFFFF;
+    --text: #2C1A0E;
+    --muted: #8A7060;
+    --border: #D4C4B0;
+    --daily: #5C3317;
+    --daily-light: #8C4F22;
+    --needs: #C8622A;
+    --needs-light: #E8834A;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'IBM Plex Sans Arabic', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
 
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Cairo', sans-serif;
-  min-height: 100vh;
-  background-image:
-    radial-gradient(ellipse at 15% 10%, rgba(45,106,79,0.1) 0%, transparent 50%),
-    radial-gradient(ellipse at 85% 90%, rgba(201,168,76,0.06) 0%, transparent 50%);
-}
+  /* Header */
+  .header { background: var(--brand); padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(92,51,23,0.3); }
+  .header-left { display: flex; align-items: center; gap: 12px; }
+  .header-title { color: white; font-size: 18px; font-weight: 700; border: none; background: transparent; font-family: inherit; cursor: pointer; border-bottom: 1px dashed rgba(255,255,255,0.3); }
+  .year-selector { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 4px 8px; color: white; font-size: 13px; }
 
-/* HEADER */
-.header {
-  text-align: center;
-  padding: 40px 24px 28px;
-  border-bottom: 1px solid var(--border);
-  position: relative;
-}
-.header::after {
-  content:'';
-  position:absolute; bottom:-1px; left:50%; transform:translateX(-50%);
-  width:160px; height:2px;
-  background: linear-gradient(90deg, transparent, var(--gold), transparent);
-}
-.basmala { font-family:'Amiri',serif; font-size:26px; color:var(--gold); margin-bottom:8px; }
-.app-title { font-size:12px; color:var(--text-muted); letter-spacing:3px; font-weight:300; }
+  /* Navigation */
+  .month-nav { background: var(--brand); padding: 0 16px 12px; display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .month-nav::-webkit-scrollbar { display: none; }
+  .month-btn { flex-shrink: 0; padding: 6px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2); background: transparent; color: rgba(255,255,255,0.7); font-size: 12px; white-space: nowrap; }
+  .month-btn.active { background: var(--accent); border-color: var(--accent); color: white; font-weight: 600; }
 
-.container { max-width:820px; margin:0 auto; padding:28px 16px 80px; }
+  .tab-nav { display: flex; background: var(--bg2); border-bottom: 2px solid var(--border); padding: 0 16px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .tab-nav::-webkit-scrollbar { display: none; }
+  .tab-btn { padding: 12px 14px; border: none; background: transparent; color: var(--muted); font-size: 13px; font-weight: 500; white-space: nowrap; border-bottom: 3px solid transparent; margin-bottom: -2px; display: flex; align-items: center; gap: 6px; }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 700; }
 
-/* STAGE BANNER */
-.stage-banner {
-  background: linear-gradient(135deg, var(--gold-bg), var(--green-dim));
-  border: 1px solid var(--gold-dim);
-  border-radius: 14px;
-  padding: 18px 22px;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-.stage-badge {
-  background: var(--gold-dim);
-  color: var(--gold-light);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  padding: 4px 10px;
-  border-radius: 20px;
-  white-space: nowrap;
-}
-.stage-info { flex:1; }
-.stage-name { font-size:16px; font-weight:700; color:var(--gold-light); margin-bottom:3px; }
-.stage-range { font-size:11px; color:var(--text-muted); }
-.stage-ward {
-  text-align: left;
-  white-space: nowrap;
-}
-.stage-ward-num { font-family:'Amiri',serif; font-size:28px; color:var(--gold); line-height:1; }
-.stage-ward-label { font-size:10px; color:var(--text-muted); }
+  /* Main content */
+  .main { padding: 16px; max-width: 100%; margin: 0 auto; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
 
-/* STATS ROW */
-.stats-row {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  margin-bottom: 20px;
-}
-.stat-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 16px 12px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-.stat-card::before {
-  content:''; position:absolute; top:0; left:0; right:0; height:2px;
-  background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
-}
-.stat-card.g::before { background: linear-gradient(90deg, transparent, var(--green), transparent); }
-.stat-num { font-size:26px; font-weight:700; color:var(--gold); font-family:'Amiri',serif; line-height:1; margin-bottom:5px; }
-.stat-card.g .stat-num { color:var(--green-light); }
-.stat-label { font-size:10px; color:var(--text-muted); font-weight:300; }
+  /* Summary cards */
+  .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px; }
+  .summary-card { background: var(--card); border-radius: 12px; padding: 16px; border: 1px solid var(--border); }
+  .card-label { font-size: 11px; color: var(--muted); margin-bottom: 4px; font-weight: 500; }
+  .card-value { font-size: 22px; font-weight: 700; color: var(--text); }
+  .card-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
-/* PROGRESS */
-.progress-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 22px;
-  margin-bottom: 20px;
-}
-.progress-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-}
-.progress-label { font-size:12px; color:var(--text-muted); }
-.progress-pct { font-size:13px; font-weight:700; color:var(--gold); }
-.progress-bar-bg {
-  background: var(--green-dim);
-  border-radius: 6px; height: 8px; overflow:hidden; margin-bottom:8px;
-}
-.progress-bar-fill {
-  height:100%;
-  background: linear-gradient(90deg, var(--green), var(--green-light));
-  border-radius:6px;
-  transition: width 0.7s cubic-bezier(.4,0,.2,1);
-}
-.progress-sub {
-  display:flex; justify-content:space-between;
-  font-size:11px; color:var(--text-dim);
-}
+  /* Section */
+  .section { background: var(--card); border-radius: 12px; border: 1px solid var(--border); margin-bottom: 16px; overflow: hidden; }
+  .section-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: var(--bg2); border-bottom: 1px solid var(--border); }
+  .section-title { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 14px; color: var(--brand); flex: 1; min-width: 0; }
+  .section-title-input { border: none; background: transparent; font-family: inherit; font-size: 14px; font-weight: 700; color: var(--brand); width: 100%; min-width: 0; }
+  .section-total { font-weight: 700; font-size: 14px; color: var(--accent); white-space: nowrap; margin: 0 8px; }
 
-/* CONTROLS */
-.section-label {
-  font-size:10px; letter-spacing:2.5px; color:var(--text-dim);
-  text-transform:uppercase; margin-bottom:10px; padding-right:2px;
-}
-.controls-row {
-  display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px;
-}
-.ctrl-box {
-  background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px;
-}
-.ctrl-label { font-size:11px; color:var(--text-muted); margin-bottom:10px; display:block; }
-.num-row { display:flex; align-items:center; gap:8px; }
-.nb {
-  width:34px; height:34px; border-radius:8px;
-  border:1px solid var(--border2); background:var(--surface);
-  color:var(--gold); font-size:20px; cursor:pointer;
-  display:flex; align-items:center; justify-content:center;
-  transition:all .15s; flex-shrink:0; font-family:'Cairo',sans-serif;
-}
-.nb:hover { background:var(--green-dim); border-color:var(--green); }
-.nv {
-  font-size:24px; font-weight:700; color:var(--text);
-  font-family:'Amiri',serif; flex:1; text-align:center;
-}
+  /* Row items */
+  .row-item { display: flex; align-items: center; padding: 8px 12px; border-bottom: 1px solid var(--bg2); gap: 8px; }
+  .row-label-input { flex: 1; font-size: 13px; color: var(--text); background: transparent; border: none; min-width: 0; }
+  .row-input-wrap { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+  .row-input { width: 75px; padding: 4px 6px; border: 1.5px solid var(--border); border-radius: 6px; font-size: 13px; text-align: left; direction: ltr; }
+  .row-currency { font-size: 10px; color: var(--muted); }
+  .delete-row-btn { color: var(--red); background: none; border: none; font-size: 14px; padding: 4px; cursor: pointer; }
 
-/* WEEK GRID */
-.week-grid {
-  display:grid; grid-template-columns:repeat(7,1fr); gap:8px; margin-bottom:20px;
-}
-.day-card {
-  background:var(--card); border:1px solid var(--border);
-  border-radius:10px; padding:10px 5px; text-align:center;
-  cursor:pointer; transition:all .2s; position:relative; user-select:none;
-}
-.day-card.hifz  { border-color:var(--gold-dim); }
-.day-card.sama3 { border-color:var(--green); }
-.day-card.sheikh { border-color:var(--purple-dim); }
-.day-card.active.hifz  { background:var(--gold-bg); }
-.day-card.active.sama3 { background:var(--green-dim); }
-.day-card.done { opacity:.45; }
-.day-card.done::after {
-  content:'✓'; position:absolute; top:3px; left:5px;
-  font-size:9px; color:var(--green-light);
-}
-.day-name { font-size:9px; color:var(--text-muted); margin-bottom:4px; }
-.day-tag { font-size:8px; font-weight:700; padding:2px 0; }
-.day-card.hifz .day-tag  { color:var(--gold); }
-.day-card.sama3 .day-tag { color:var(--green-light); }
-.day-card.sheikh .day-tag { color:var(--purple); }
-.day-sub { font-size:8px; color:var(--text-dim); margin-top:3px; line-height:1.3; }
+  /* Add row button */
+  .add-row-btn { display: flex; align-items: center; gap: 6px; padding: 10px; color: var(--accent); font-size: 12px; background: none; border: none; width: 100%; justify-content: center; border-top: 1px dashed var(--border); }
 
-/* REVIEW CARD */
-.review-card {
-  background:var(--card); border:1px solid var(--border);
-  border-radius:14px; padding:22px; margin-bottom:20px;
-}
-.review-top {
-  display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;
-}
-.review-title { font-size:13px; color:var(--text-muted); }
-.review-stage-tag {
-  font-size:10px; background:var(--green-dim); border:1px solid var(--green);
-  color:var(--green-light); padding:4px 10px; border-radius:20px;
-}
-.review-pages {
-  display:grid; grid-template-columns:1fr auto 1fr; gap:12px;
-  align-items:center; margin-bottom:18px;
-}
-.rp-box {
-  background:var(--surface); border-radius:10px; padding:14px;
-  text-align:center;
-}
-.rp-num { font-family:'Amiri',serif; font-size:30px; color:var(--accent); line-height:1; }
-.rp-label { font-size:10px; color:var(--text-dim); margin-top:3px; }
-.rp-arrow { font-size:20px; color:var(--text-dim); text-align:center; }
-.mark-btn {
-  width:100%; padding:13px;
-  background: linear-gradient(135deg, var(--green-dim), #0a1f16);
-  border:1px solid var(--green); border-radius:10px;
-  color:var(--green-light); font-family:'Cairo',sans-serif;
-  font-size:13px; font-weight:700; cursor:pointer; transition:all .2s;
-}
-.mark-btn:hover { background:linear-gradient(135deg, var(--green), #1a4a35); color:#fff; }
+  /* Annual table */
+  .table-container { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 10px; }
+  .annual-table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 600px; }
+  .annual-table th, .annual-table td { padding: 8px; border-bottom: 1px solid var(--bg2); text-align: center; }
+  .annual-table th { background: var(--brand); color: white; }
+  .annual-table td:first-child { text-align: right; font-weight: 600; position: sticky; right: 0; background: white; z-index: 1; }
 
-/* RULES */
-.rules-card {
-  background:var(--card); border:1px solid var(--border);
-  border-radius:14px; padding:20px; margin-bottom:20px;
-}
-.rule-item {
-  display:flex; gap:10px; padding:8px 0;
-  border-bottom:1px solid var(--border); align-items:flex-start;
-}
-.rule-item:last-child { border-bottom:none; }
-.rule-dot {
-  width:6px; height:6px; border-radius:50%;
-  background:var(--gold-dim); flex-shrink:0; margin-top:6px;
-}
-.rule-text { font-size:12px; color:var(--text-muted); line-height:1.7; }
+  /* Progress bar */
+  .progress-wrap { margin-bottom: 12px; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px; }
+  .progress-bar { height: 8px; background: var(--bg2); border-radius: 4px; overflow: hidden; }
+  .progress-fill { height: 100%; transition: width 0.3s; }
+  .progress-fill.green { background: var(--green); }
+  .progress-fill.red { background: var(--red); }
+  .progress-fill.accent { background: var(--brand); }
 
-/* MILESTONES */
-.stages-list {
-  background:var(--card); border:1px solid var(--border);
-  border-radius:14px; overflow:hidden; margin-bottom:20px;
-}
-.stage-row {
-  display:grid; grid-template-columns:auto 1fr auto auto;
-  gap:12px; align-items:center;
-  padding:12px 18px; border-bottom:1px solid var(--border);
-  transition:background .2s;
-}
-.stage-row:last-child { border-bottom:none; }
-.stage-row.done { opacity:.4; }
-.stage-row.current { background:var(--gold-bg); }
-.s-dot {
-  width:10px; height:10px; border-radius:50%;
-  background:var(--border2); flex-shrink:0;
-}
-.s-dot.done { background:var(--green-light); }
-.s-dot.current { background:var(--gold); box-shadow:0 0 8px var(--gold); }
-.s-name { font-size:12px; color:var(--text-muted); }
-.stage-row.current .s-name { color:var(--text); font-weight:600; }
-.s-ward { font-size:11px; color:var(--gold); font-family:'Amiri',serif; white-space:nowrap; }
-.s-range { font-size:10px; color:var(--text-dim); white-space:nowrap; }
+  /* Forms */
+  .form-group { margin-bottom: 12px; }
+  .form-label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+  .form-input, .form-select { width: 100%; padding: 8px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 13px; }
+  .add-btn { width: 100%; padding: 10px; background: var(--brand); color: white; border: none; border-radius: 8px; font-weight: 600; margin-top: 8px; }
 
-/* TOAST */
-.toast {
-  position:fixed; bottom:28px; left:50%;
-  transform:translateX(-50%) translateY(80px);
-  background:var(--green); color:#fff;
-  padding:11px 22px; border-radius:30px;
-  font-size:13px; font-weight:600;
-  transition:transform .3s cubic-bezier(.4,0,.2,1);
-  z-index:999; white-space:nowrap;
-}
-.toast.show { transform:translateX(-50%) translateY(0); }
+  .save-btn { position: fixed; bottom: 20px; left: 20px; right: 20px; padding: 14px; background: var(--brand); color: white; border: none; border-radius: 12px; font-weight: 700; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 1000; }
+  .toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: white; padding: 8px 16px; border-radius: 20px; font-size: 12px; display: none; z-index: 1001; }
+  .toast.show { display: block; }
 
-.divider { height:1px; background:linear-gradient(90deg,transparent,var(--border),transparent); margin:22px 0; }
-
-@media(max-width:520px){
-  .stats-row { grid-template-columns:repeat(2,1fr); }
-  .week-grid { grid-template-columns:repeat(4,1fr); }
-  .controls-row { grid-template-columns:1fr; }
-  .stage-banner { flex-direction:column; text-align:center; }
-  .stage-ward { text-align:center; }
-}
+  @media (max-width: 480px) {
+    .summary-grid { grid-template-columns: 1fr 1fr; }
+    .header-title { font-size: 16px; }
+  }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <div class="basmala">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
-  <div class="app-title">متابع الحفظ والمراجعة</div>
+  <div class="header-left">
+    <input class="header-title" id="mainTitle" value="الخطة المالية — أبوعيسى" onchange="saveSettings()">
+  </div>
+  <select class="year-selector" id="yearSelector" onchange="changeYear(this.value)">
+    <option value="2024">2024</option>
+    <option value="2025">2025</option>
+    <option value="2026" selected>2026</option>
+  </select>
 </div>
 
-<div class="container">
+<div class="month-nav" id="monthNav"></div>
 
-  <!-- Stage Banner -->
-  <div class="stage-banner" id="stage-banner">
-    <div>
-      <div class="stage-badge" id="s-badge">المرحلة الأولى</div>
-    </div>
-    <div class="stage-info">
-      <div class="stage-name" id="s-name">حتى ٢٠ صفحة</div>
-      <div class="stage-range" id="s-range">من صفحة ١ إلى ٢٠</div>
-    </div>
-    <div class="stage-ward">
-      <div class="stage-ward-num" id="s-ward-num">٣</div>
-      <div class="stage-ward-label">صفحات مراجعة / يوم</div>
-    </div>
-  </div>
-
-  <!-- Stats -->
-  <div class="stats-row">
-    <div class="stat-card">
-      <div class="stat-num" id="stat-pages">16</div>
-      <div class="stat-label">صفحة محفوظة</div>
-    </div>
-    <div class="stat-card g">
-      <div class="stat-num" id="stat-juz">0.8</div>
-      <div class="stat-label">جزء مكتمل</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-num" id="stat-next">4</div>
-      <div class="stat-label">صفحات للمرحلة القادمة</div>
-    </div>
-    <div class="stat-card g">
-      <div class="stat-num" id="stat-cycle">1</div>
-      <div class="stat-label">أسبوع / دورة مراجعة</div>
-    </div>
-  </div>
-
-  <!-- Progress -->
-  <div class="progress-card">
-    <div class="progress-header">
-      <div class="progress-label" id="prog-label">التقدم نحو المرحلة الثانية</div>
-      <div class="progress-pct" id="prog-pct">80%</div>
-    </div>
-    <div class="progress-bar-bg">
-      <div class="progress-bar-fill" id="prog-fill" style="width:80%"></div>
-    </div>
-    <div class="progress-sub">
-      <span id="prog-left">صفحة 16</span>
-      <span id="prog-right">الهدف: 20 صفحة</span>
-    </div>
-  </div>
-
-  <!-- Controls -->
-  <div class="section-label">تحديث بيانات الحفظ</div>
-  <div class="controls-row">
-    <div class="ctrl-box">
-      <label class="ctrl-label">الصفحة المحفوظة حالياً</label>
-      <div class="num-row">
-        <button class="nb" onclick="change('mem',-1)">−</button>
-        <div class="nv" id="v-mem">16</div>
-        <button class="nb" onclick="change('mem',1)">+</button>
-      </div>
-    </div>
-    <div class="ctrl-box">
-      <label class="ctrl-label">آخر صفحة راجعتها (بعد الفجر)</label>
-      <div class="num-row">
-        <button class="nb" onclick="change('rev',-1)">−</button>
-        <div class="nv" id="v-rev">1</div>
-        <button class="nb" onclick="change('rev',1)">+</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Review Card -->
-  <div class="section-label">ورد المراجعة — بعد الفجر اليوم</div>
-  <div class="review-card">
-    <div class="review-top">
-      <div class="review-title">اقرأ غيباً من صفحة ← إلى صفحة</div>
-      <div class="review-stage-tag" id="rev-tag">٣ صفحات / يوم</div>
-    </div>
-    <div class="review-pages">
-      <div class="rp-box">
-        <div class="rp-num" id="rev-from">1</div>
-        <div class="rp-label">من صفحة</div>
-      </div>
-      <div class="rp-arrow">←</div>
-      <div class="rp-box">
-        <div class="rp-num" id="rev-to">3</div>
-        <div class="rp-label">إلى صفحة</div>
-      </div>
-    </div>
-    <button class="mark-btn" onclick="markReview()">✓ سجّل مراجعة اليوم واضبط الموضع</button>
-  </div>
-
-  <!-- Week Schedule -->
-  <div class="section-label">جدول الأسبوع</div>
-  <div class="week-grid" id="week-grid"></div>
-
-  <div class="divider"></div>
-
-  <!-- All Stages -->
-  <div class="section-label">مراحل الخطة الكاملة</div>
-  <div class="stages-list" id="stages-list"></div>
-
-  <div class="divider"></div>
-
-  <!-- Rules -->
-  <div class="section-label">قواعد مهمة طوال الرحلة</div>
-  <div class="rules-card" id="rules-box"></div>
-
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('expenses', this)">💸 الالتزامات</button>
+  <button class="tab-btn" onclick="switchTab('daily', this)">🧾 المنصرفات</button>
+  <button class="tab-btn" onclick="switchTab('revenues', this)">💰 الإيرادات</button>
+  <button class="tab-btn" onclick="switchTab('net', this)">⚖️ الصافي</button>
+  <button class="tab-btn" onclick="switchTab('investments', this)">📈 الاستثمار</button>
+  <button class="tab-btn" onclick="switchTab('needs', this)">📝 الاحتياجات</button>
+  <button class="tab-btn" onclick="switchTab('annual', this)">🗓 السنوي</button>
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="main">
+  <!-- EXPENSES TAB -->
+  <div class="tab-panel active" id="tab-expenses">
+    <div id="exp-sections-container"></div>
+    <button class="add-row-btn" onclick="addSection('exp')">➕ إضافة قسم جديد للالتزامات</button>
+    <div class="summary-grid">
+      <div class="summary-card red">
+        <div class="card-label">إجمالي الالتزامات</div>
+        <div class="card-value red" id="total-exp-display">0</div>
+        <div class="card-sub">KWD</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAILY EXPENSES TAB -->
+  <div class="tab-panel" id="tab-daily">
+    <div class="section" style="padding: 16px;">
+      <div class="form-group">
+        <label class="form-label">اسم المنصرف</label>
+        <input class="form-input" id="daily-name" placeholder="مثال: قهوة، بقالة...">
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div class="form-group">
+          <label class="form-label">المبلغ (KWD)</label>
+          <input class="form-input" id="daily-amount" type="number" placeholder="0.000" style="direction:ltr;">
+        </div>
+        <div class="form-group">
+          <label class="form-label">الفئة</label>
+          <select class="form-select" id="daily-category"></select>
+        </div>
+      </div>
+      <button class="add-btn" onclick="addDailyExpense()">تسجيل المنصرف</button>
+    </div>
+    <div class="section" id="daily-list-container">
+      <div id="daily-expenses-list"></div>
+    </div>
+    <div class="summary-card" style="background: var(--brand); color: white;">
+      <div class="card-label" style="color: rgba(255,255,255,0.7);">إجمالي المنصرفات اليومية</div>
+      <div class="card-value" id="daily-total-display">0 KWD</div>
+    </div>
+  </div>
+
+  <!-- REVENUES TAB -->
+  <div class="tab-panel" id="tab-revenues">
+    <div id="rev-sections-container"></div>
+    <button class="add-row-btn" onclick="addSection('rev')">➕ إضافة قسم جديد للإيرادات</button>
+    <div class="summary-grid">
+      <div class="summary-card green">
+        <div class="card-label">إجمالي الإيرادات</div>
+        <div class="card-value green" id="total-rev-display">0</div>
+        <div class="card-sub">KWD</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NET TAB -->
+  <div class="tab-panel" id="tab-net">
+    <div class="summary-grid">
+      <div class="summary-card green">
+        <div class="card-label">الإيرادات</div>
+        <div class="card-value green" id="net-rev">0</div>
+      </div>
+      <div class="summary-card red">
+        <div class="card-label">الالتزامات</div>
+        <div class="card-value red" id="net-exp">0</div>
+      </div>
+      <div class="summary-card brand">
+        <div class="card-label">المنصرفات</div>
+        <div class="card-value" style="color:white" id="net-daily">0</div>
+      </div>
+      <div class="summary-card" id="net-card">
+        <div class="card-label">الصافي</div>
+        <div class="card-value" id="net-value">0</div>
+        <div class="card-sub" id="net-sub">KWD</div>
+      </div>
+    </div>
+    <div class="section" style="padding: 16px;">
+      <div class="progress-wrap">
+        <div class="progress-label"><span>الالتزامات</span><span id="exp-pct">0%</span></div>
+        <div class="progress-bar"><div class="progress-fill red" id="exp-bar" style="width:0%"></div></div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-label"><span>المنصرفات</span><span id="daily-pct">0%</span></div>
+        <div class="progress-bar"><div class="progress-fill accent" id="daily-bar" style="width:0%"></div></div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-label"><span>الصافي المتاح</span><span id="net-pct">0%</span></div>
+        <div class="progress-bar"><div class="progress-fill green" id="net-bar" style="width:0%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INVESTMENTS TAB -->
+  <div class="tab-panel" id="tab-investments">
+    <div class="section" style="padding: 16px; background: linear-gradient(135deg, var(--brand), var(--accent)); color: white;">
+      <div style="font-size: 14px; font-weight: 700; margin-bottom: 12px;">🎯 هدف الادخار</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
+        <div>
+          <div style="font-size: 10px; opacity: 0.8;">الهدف السنوي</div>
+          <input class="row-input" style="width: 100%; background: rgba(255,255,255,0.1); color: white; border-color: rgba(255,255,255,0.3);" type="number" id="inv-goal" oninput="updateAll()">
+        </div>
+        <div>
+          <div style="font-size: 10px; opacity: 0.8;">المتراكم</div>
+          <div id="inv-accumulated" style="font-weight: 700; font-size: 16px; margin-top: 4px;">0</div>
+        </div>
+      </div>
+      <div class="progress-bar" style="background: rgba(255,255,255,0.2);"><div class="progress-fill" id="goal-fill" style="width:0%; background: white;"></div></div>
+      <div style="display: flex; justify-content: space-between; font-size: 10px; margin-top: 4px;">
+        <span id="goal-pct">0%</span>
+        <span id="goal-remaining" style="direction:ltr;">Remaining: 0 KWD</span>
+      </div>
+    </div>
+    <div id="inv-sections-container"></div>
+    <button class="add-row-btn" onclick="addSection('inv')">➕ إضافة قسم استثمار</button>
+  </div>
+
+  <!-- NEEDS TAB -->
+  <div class="tab-panel" id="tab-needs">
+    <div class="section" style="padding: 16px;">
+      <div class="form-group">
+        <label class="form-label">اسم الاحتياج</label>
+        <input class="form-input" id="need-name" placeholder="مثال: هاتف جديد...">
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div class="form-group">
+          <label class="form-label">السعر المتوقع</label>
+          <input class="form-input" id="need-amount" type="number" placeholder="0.000">
+        </div>
+        <div class="form-group">
+          <label class="form-label">الأولوية</label>
+          <select class="form-select" id="need-priority">
+            <option value="high">🔴 عالية</option>
+            <option value="med" selected>🟡 متوسطة</option>
+            <option value="low">🟢 منخفضة</option>
+          </select>
+        </div>
+      </div>
+      <button class="add-btn" onclick="addNeed()">إضافة للقائمة</button>
+    </div>
+    <div id="needs-list"></div>
+  </div>
+
+  <!-- ANNUAL TAB -->
+  <div class="tab-panel" id="tab-annual">
+    <div class="table-container">
+      <table class="annual-table" id="annualTable"></table>
+    </div>
+  </div>
+
+  <div style="height: 80px;"></div>
+  <button class="save-btn" onclick="saveData()">💾 حفظ البيانات</button>
+</div>
+
+<div class="toast" id="toast">✅ تم الحفظ بنجاح</div>
 
 <script>
-// ── DATA FROM PDF ──────────────────────────────────────────────
-const STAGES = [
-  { num:1, label:'المرحلة الأولى',   range:'حتى ٢٠ صفحة',         maxPages:20,  dailyPages:3,   dailyLabel:'٣ صفحات' },
-  { num:2, label:'المرحلة الثانية',  range:'من جزء إلى جزئين',    maxPages:40,  dailyPages:5,   dailyLabel:'٥ صفحات' },
-  { num:3, label:'المرحلة الثالثة',  range:'حتى خمسة أجزاء',      maxPages:100, dailyPages:10,  dailyLabel:'١٠ صفحات' },
-  { num:4, label:'المرحلة الرابعة',  range:'حتى عشرة أجزاء',      maxPages:200, dailyPages:20,  dailyLabel:'جزء كامل' },
-  { num:5, label:'المرحلة الخامسة',  range:'بعد عشرة أجزاء',      maxPages:300, dailyPages:30,  dailyLabel:'جزء ونصف' },
-  { num:6, label:'المرحلة السادسة',  range:'بعد خمسة عشر جزءاً',  maxPages:400, dailyPages:40,  dailyLabel:'جزآن' },
-  { num:7, label:'المرحلة السابعة',  range:'بعد عشرين جزءاً',     maxPages:500, dailyPages:50,  dailyLabel:'جزآن ونصف' },
-  { num:8, label:'المرحلة الثامنة',  range:'حتى ختم القرآن',      maxPages:604, dailyPages:60,  dailyLabel:'ثلاثة أجزاء' },
-];
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+let currentMonth = new Date().getMonth();
+let currentYear = new Date().getFullYear();
 
-const DAYS = [
-  { name:'الإثنين',  type:'hifz',   tag:'حفظ',    sub:'صفحة جديدة\nمراجعة فجر' },
-  { name:'الثلاثاء', type:'hifz',   tag:'حفظ',    sub:'صفحة جديدة\nمراجعة فجر' },
-  { name:'الأربعاء', type:'sama3',  tag:'سماع',   sub:'إث + ثلا\nمراجعة فجر' },
-  { name:'الخميس',   type:'hifz',   tag:'حفظ',    sub:'صفحة جديدة\nمراجعة فجر' },
-  { name:'الجمعة',   type:'hifz',   tag:'حفظ',    sub:'صفحة جديدة\nمراجعة فجر' },
-  { name:'السبت',    type:'sheikh', tag:'شيخ',    sub:'سرد شامل\nاختبار كامل' },
-  { name:'الأحد',    type:'sama3',  tag:'سماع',   sub:'خ + ج\nمراجعة فجر' },
-];
-
-const RULES = [
-  'أي صفحة جديدة لازم تراجع ثاني يوم، وبعد أسبوع، وبعد شهر.',
-  'لو بدأت المراجعة تضعف — لا تزود الحفظ.',
-  'الاستمرارية أهم من السرعة.',
-  'الحفظ الحقيقي يعتمد على التكرار المتباعد.',
-  'ركز على مواضع الضعف بدل إعادة الصفحة كاملة كل مرة.',
-];
-
-// ── STATE ──────────────────────────────────────────────────────
-let S = JSON.parse(localStorage.getItem('qtracker_v2') || 'null') || {
-  mem: 16,
-  rev: 1,
-  doneDays: [],
-  lastReset: '',
+const DEFAULT_DATA = {
+  rev: [{ id: 'rev_s1', icon: '🏦', title: 'إيرادات', rows: [{ id: 'r1', label: 'الراتب', key: 'rev_fixed_salary' }] }],
+  exp: [{ id: 'exp_s1', icon: '🏛', title: 'التزامات', rows: [{ id: 'e1', label: 'قسط', key: 'exp_bank_loan' }] }],
+  inv: [{ id: 'inv_s1', icon: '📈', title: 'استثمارات', rows: [{ id: 'i1', label: 'توفير', key: 'inv_savings' }] }]
 };
 
-function save() { localStorage.setItem('qtracker_v2', JSON.stringify(S)); }
-
-function getStage(pages) {
-  return STAGES.find(s => pages <= s.maxPages) || STAGES[STAGES.length-1];
+function getSections(type) {
+  const saved = localStorage.getItem(`sections_${type}`);
+  return saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(DEFAULT_DATA[type]));
 }
 
-function toArabicNum(n) {
-  return String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
+function saveSections(type, data) { localStorage.setItem(`sections_${type}`, JSON.stringify(data)); }
+
+function getDailyExpenses() {
+  const saved = localStorage.getItem(`daily_${currentYear}_${currentMonth}`);
+  return saved ? JSON.parse(saved) : [];
 }
 
-// ── RENDER ─────────────────────────────────────────────────────
-function render() {
-  const { mem, rev } = S;
-  const stage = getStage(mem);
-  const prevStageMax = STAGES[stage.num-2] ? STAGES[stage.num-2].maxPages : 0;
-  const nextStageMax = stage.maxPages;
+function saveDailyExpenses(list) { localStorage.setItem(`daily_${currentYear}_${currentMonth}`, JSON.stringify(list)); }
 
-  // Stage banner
-  document.getElementById('s-badge').textContent = stage.label;
-  document.getElementById('s-name').textContent = stage.range;
-  document.getElementById('s-range').textContent = `من صفحة ${prevStageMax+1} إلى ${nextStageMax}`;
-  document.getElementById('s-ward-num').textContent = toArabicNum(stage.dailyPages);
+function getNeeds() {
+  const saved = localStorage.getItem(`needs_${currentYear}`);
+  return saved ? JSON.parse(saved) : [];
+}
 
-  // Stats
-  document.getElementById('stat-pages').textContent = mem;
-  document.getElementById('stat-juz').textContent = (mem/20).toFixed(1);
-  document.getElementById('stat-next').textContent = nextStageMax - mem;
-  const cycleDays = Math.ceil(mem / stage.dailyPages);
-  document.getElementById('stat-cycle').textContent = Math.ceil(cycleDays / 6);
+function saveNeeds(list) { localStorage.setItem(`needs_${currentYear}`, JSON.stringify(list)); }
 
-  // Progress
-  const pct = Math.round(((mem - prevStageMax) / (nextStageMax - prevStageMax)) * 100);
-  document.getElementById('prog-fill').style.width = Math.min(pct,100)+'%';
-  document.getElementById('prog-pct').textContent = pct+'%';
-  document.getElementById('prog-label').textContent = `التقدم نحو ${STAGES[stage.num] ? STAGES[stage.num].label : 'الختم'}`;
-  document.getElementById('prog-left').textContent = 'صفحة '+mem;
-  document.getElementById('prog-right').textContent = 'الهدف: '+nextStageMax+' صفحة';
+function storageKey(year, month, key) { return `budget_${year}_${month}_${key}`; }
 
-  // Input vals
-  document.getElementById('v-mem').textContent = mem;
-  document.getElementById('v-rev').textContent = rev;
+function getVal(key) { return parseFloat(document.querySelector(`[data-key="${key}"]`)?.value || 0) || 0; }
 
-  // Review position
-  const revFrom = ((rev - 1) % mem) + 1;
-  const revTo   = Math.min(revFrom + stage.dailyPages - 1, mem);
-  document.getElementById('rev-from').textContent = revFrom;
-  document.getElementById('rev-to').textContent   = revTo;
-  document.getElementById('rev-tag').textContent  = stage.dailyLabel + ' / يوم';
+function fmt(n) { return n.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3 }); }
 
-  // Week grid
-  const grid = document.getElementById('week-grid');
-  grid.innerHTML = '';
-  DAYS.forEach((d,i) => {
-    const el = document.createElement('div');
-    el.className = 'day-card '+d.type+(S.doneDays.includes(i)?' done':'');
-    el.innerHTML = `<div class="day-name">${d.name.slice(0,4)}</div><div class="day-tag">${d.tag}</div><div class="day-sub">${d.sub}</div>`;
-    el.onclick = () => { toggleDay(i); };
-    grid.appendChild(el);
-  });
+function uid() { return '_' + Math.random().toString(36).substr(2, 9); }
 
-  // Stages list
-  const sl = document.getElementById('stages-list');
-  sl.innerHTML = '';
-  STAGES.forEach(st => {
-    const done    = mem >= st.maxPages;
-    const current = st.num === stage.num;
-    const row = document.createElement('div');
-    row.className = 'stage-row'+(done?' done':current?' current':'');
-    row.innerHTML = `
-      <div class="s-dot ${done?'done':current?'current':''}"></div>
-      <div class="s-name">${st.label} — ${st.range}</div>
-      <div class="s-ward">${st.dailyLabel}</div>
-      <div class="s-range">حتى ${toArabicNum(st.maxPages)} ص</div>
+function renderSections(type) {
+  const sections = getSections(type);
+  const container = document.getElementById(`${type}-sections-container`);
+  if (!container) return;
+  container.innerHTML = '';
+
+  sections.forEach(sec => {
+    const div = document.createElement('div');
+    div.className = 'section';
+    let rowsHTML = sec.rows.map(row => `
+      <div class="row-item">
+        <input class="row-label-input" value="${row.label}" onchange="updateRowLabel('${type}','${sec.id}','${row.id}',this.value)">
+        <div class="row-input-wrap">
+          <input class="row-input" type="number" placeholder="0.000" data-key="${row.key}" oninput="updateAll()">
+          <span class="row-currency">KWD</span>
+          <button class="delete-row-btn" onclick="deleteRow('${type}','${sec.id}','${row.id}')">✕</button>
+        </div>
+      </div>
+    `).join('');
+
+    div.innerHTML = `
+      <div class="section-header">
+        <div class="section-title">
+          <span>${sec.icon}</span>
+          <input class="section-title-input" value="${sec.title}" onchange="updateSectionTitle('${type}','${sec.id}',this.value)">
+        </div>
+        <span class="section-total" id="total-${sec.id}">0.000 KWD</span>
+      </div>
+      <div class="section-body">${rowsHTML}</div>
+      <button class="add-row-btn" onclick="addRow('${type}','${sec.id}')">➕ إضافة بند</button>
     `;
-    sl.appendChild(row);
+    container.appendChild(div);
+  });
+  loadMonthValues();
+  updateAll();
+}
+
+function updateSectionTitle(type, id, val) {
+  const data = getSections(type);
+  const s = data.find(x => x.id === id);
+  if (s) { s.title = val; saveSections(type, data); rebuildDailyCategoryOptions(); }
+}
+
+function updateRowLabel(type, sid, rid, val) {
+  const data = getSections(type);
+  const s = data.find(x => x.id === sid);
+  if (s) { const r = s.rows.find(x => x.id === rid); if (r) r.label = val; saveSections(type, data); }
+}
+
+function addRow(type, sid) {
+  const data = getSections(type);
+  const s = data.find(x => x.id === sid);
+  if (s) { s.rows.push({ id: uid(), label: 'بند جديد', key: `${type}_${uid()}` }); saveSections(type, data); renderSections(type); }
+}
+
+function deleteRow(type, sid, rid) {
+  const data = getSections(type);
+  const s = data.find(x => x.id === sid);
+  if (s) { s.rows = s.rows.filter(x => x.id !== rid); saveSections(type, data); renderSections(type); }
+}
+
+function addSection(type) {
+  const data = getSections(type);
+  data.push({ id: uid(), icon: '📌', title: 'قسم جديد', rows: [{ id: uid(), label: 'بند جديد', key: `${type}_${uid()}` }] });
+  saveSections(type, data); renderSections(type);
+}
+
+function rebuildDailyCategoryOptions() {
+  const sel = document.getElementById('daily-category');
+  if (!sel) return;
+  sel.innerHTML = '';
+  getSections('exp').forEach(s => {
+    const opt = document.createElement('option');
+    opt.value = s.id; opt.textContent = s.icon + ' ' + s.title; sel.appendChild(opt);
+  });
+}
+
+function addDailyExpense() {
+  const name = document.getElementById('daily-name').value;
+  const amount = parseFloat(document.getElementById('daily-amount').value);
+  const cat = document.getElementById('daily-category').value;
+  if (!name || !amount) return;
+  const list = getDailyExpenses();
+  list.unshift({ id: uid(), name, amount, category: cat, date: new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'short' }) });
+  saveDailyExpenses(list);
+  document.getElementById('daily-name').value = '';
+  document.getElementById('daily-amount').value = '';
+  renderDailyExpenses(); updateAll();
+}
+
+function renderDailyExpenses() {
+  const list = getDailyExpenses();
+  const container = document.getElementById('daily-expenses-list');
+  container.innerHTML = list.map(e => `
+    <div class="row-item">
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:600">${e.name}</div>
+        <div style="font-size:10px;color:var(--muted)">${e.date}</div>
+      </div>
+      <div style="font-weight:700;font-size:13px;direction:ltr">${fmt(e.amount)}</div>
+      <button class="delete-row-btn" onclick="deleteDailyExpense('${e.id}')">✕</button>
+    </div>
+  `).join('');
+}
+
+function deleteDailyExpense(id) {
+  const list = getDailyExpenses().filter(x => x.id !== id);
+  saveDailyExpenses(list); renderDailyExpenses(); updateAll();
+}
+
+function addNeed() {
+  const name = document.getElementById('need-name').value;
+  const amount = parseFloat(document.getElementById('need-amount').value) || 0;
+  const prio = document.getElementById('need-priority').value;
+  if (!name) return;
+  const list = getNeeds();
+  list.push({ id: uid(), name, amount, priority: prio, done: false });
+  saveNeeds(list);
+  document.getElementById('need-name').value = '';
+  document.getElementById('need-amount').value = '';
+  renderNeeds();
+}
+
+function renderNeeds() {
+  const list = getNeeds();
+  const container = document.getElementById('needs-list');
+  container.innerHTML = list.map(n => `
+    <div class="row-item">
+      <input type="checkbox" ${n.done ? 'checked' : ''} onchange="toggleNeed('${n.id}')">
+      <span style="flex:1;font-size:13px;${n.done ? 'text-decoration:line-through;opacity:0.5' : ''}">${n.name}</span>
+      <span style="font-weight:700;font-size:13px;direction:ltr">${fmt(n.amount)}</span>
+      <button class="delete-row-btn" onclick="deleteNeed('${n.id}')">✕</button>
+    </div>
+  `).join('');
+}
+
+function toggleNeed(id) {
+  const list = getNeeds();
+  const n = list.find(x => x.id === id);
+  if (n) n.done = !n.done;
+  saveNeeds(list); renderNeeds();
+}
+
+function deleteNeed(id) {
+  const list = getNeeds().filter(x => x.id !== id);
+  saveNeeds(list); renderNeeds();
+}
+
+function updateAll() {
+  let totalRev = 0, totalExp = 0, totalInv = 0;
+  
+  getSections('rev').forEach(s => {
+    const st = s.rows.reduce((acc, r) => acc + getVal(r.key), 0);
+    totalRev += st;
+    const el = document.getElementById(`total-${s.id}`);
+    if (el) el.textContent = fmt(st) + ' KWD';
+  });
+  
+  getSections('exp').forEach(s => {
+    const st = s.rows.reduce((acc, r) => acc + getVal(r.key), 0);
+    totalExp += st;
+    const el = document.getElementById(`total-${s.id}`);
+    if (el) el.textContent = fmt(st) + ' KWD';
   });
 
-  // Rules
-  const rb = document.getElementById('rules-box');
-  rb.innerHTML = '';
-  RULES.forEach(r => {
-    const el = document.createElement('div');
-    el.className = 'rule-item';
-    el.innerHTML = `<div class="rule-dot"></div><div class="rule-text">${r}</div>`;
-    rb.appendChild(el);
+  getSections('inv').forEach(s => {
+    const st = s.rows.reduce((acc, r) => acc + getVal(r.key), 0);
+    totalInv += st;
+    const el = document.getElementById(`total-${s.id}`);
+    if (el) el.textContent = fmt(st) + ' KWD';
   });
+
+  const totalDaily = getDailyExpenses().reduce((acc, e) => acc + e.amount, 0);
+  const net = totalRev - totalExp - totalDaily;
+
+  document.getElementById('total-rev-display').textContent = fmt(totalRev);
+  document.getElementById('total-exp-display').textContent = fmt(totalExp);
+  document.getElementById('daily-total-display').textContent = fmt(totalDaily) + ' KWD';
+  
+  document.getElementById('net-rev').textContent = fmt(totalRev);
+  document.getElementById('net-exp').textContent = fmt(totalExp);
+  document.getElementById('net-daily').textContent = fmt(totalDaily);
+  document.getElementById('net-value').textContent = fmt(Math.abs(net));
+  
+  const netSub = document.getElementById('net-sub');
+  netSub.textContent = net >= 0 ? 'KWD Surplus ✅' : 'KWD Deficit ⚠️';
+  document.getElementById('net-card').style.borderRight = net >= 0 ? '4px solid var(--green)' : '4px solid var(--red)';
+
+  if (totalRev > 0) {
+    const ep = (totalExp / totalRev) * 100;
+    const dp = (totalDaily / totalRev) * 100;
+    const np = Math.max(0, (net / totalRev) * 100);
+    document.getElementById('exp-bar').style.width = ep + '%';
+    document.getElementById('daily-bar').style.width = dp + '%';
+    document.getElementById('net-bar').style.width = np + '%';
+    document.getElementById('exp-pct').textContent = ep.toFixed(1) + '%';
+    document.getElementById('daily-pct').textContent = dp.toFixed(1) + '%';
+    document.getElementById('net-pct').textContent = np.toFixed(1) + '%';
+  }
+
+  // Investment Goal
+  const goal = parseFloat(document.getElementById('inv-goal').value) || 0;
+  let accumulated = 0;
+  // Simple accumulation for current month in this demo
+  accumulated = totalInv; 
+  document.getElementById('inv-accumulated').textContent = fmt(accumulated);
+  if (goal > 0) {
+    const gp = Math.min(100, (accumulated / goal) * 100);
+    document.getElementById('goal-fill').style.width = gp + '%';
+    document.getElementById('goal-pct').textContent = gp.toFixed(1) + '%';
+    document.getElementById('goal-remaining').textContent = 'Remaining: ' + fmt(Math.max(0, goal - accumulated)) + ' KWD';
+  }
+
+  buildAnnualTable();
 }
 
-// ── ACTIONS ────────────────────────────────────────────────────
-function change(key, delta) {
-  if (key === 'mem') S.mem = Math.max(1, Math.min(604, S.mem + delta));
-  else               S.rev = Math.max(1, Math.min(S.mem, S.rev + delta));
-  save(); render();
+function buildAnnualTable() {
+  const revKeys = getSections('rev').flatMap(s => s.rows.map(r => r.key));
+  const expKeys = getSections('exp').flatMap(s => s.rows.map(r => r.key));
+  
+  let html = '<thead><tr><th>Item</th>';
+  MONTHS.forEach(m => html += `<th>${m}</th>`);
+  html += '<th>Total</th></tr></thead><tbody>';
+  
+  const rows = [
+    { label: 'Revenue', keys: revKeys },
+    { label: 'Expenses', keys: expKeys },
+    { label: 'Daily', type: 'daily' },
+    { label: 'Net', type: 'net' }
+  ];
+
+  rows.forEach(r => {
+    html += `<tr><td>${r.label}</td>`;
+    let rowTotal = 0;
+    for(let i=0; i<12; i++) {
+      let val = 0;
+      if (i === currentMonth) {
+        if (r.label === 'Revenue') val = revKeys.reduce((acc, k) => acc + getVal(k), 0);
+        else if (r.label === 'Expenses') val = expKeys.reduce((acc, k) => acc + getVal(k), 0);
+        else if (r.type === 'daily') val = getDailyExpenses().reduce((acc, e) => acc + e.amount, 0);
+        else if (r.type === 'net') {
+          const rv = revKeys.reduce((acc, k) => acc + getVal(k), 0);
+          const ev = expKeys.reduce((acc, k) => acc + getVal(k), 0);
+          const dv = getDailyExpenses().reduce((acc, e) => acc + e.amount, 0);
+          val = rv - ev - dv;
+        }
+      }
+      html += `<td>${val !== 0 ? fmt(val) : '—'}</td>`;
+      rowTotal += val;
+    }
+    html += `<td style="font-weight:700">${fmt(rowTotal)}</td></tr>`;
+  });
+  document.getElementById('annualTable').innerHTML = html + '</tbody>';
 }
 
-function toggleDay(i) {
-  const idx = S.doneDays.indexOf(i);
-  if (idx > -1) S.doneDays.splice(idx,1);
-  else S.doneDays.push(i);
-  save(); render();
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
 }
 
-function markReview() {
-  const stage = getStage(S.mem);
-  S.rev = S.rev + stage.dailyPages;
-  if (S.rev > S.mem) S.rev = 1;
-  save(); render();
-  toast('✓ تم تسجيل مراجعة اليوم');
+function loadMonthValues() {
+  document.querySelectorAll('[data-key]').forEach(input => {
+    input.value = localStorage.getItem(storageKey(currentYear, currentMonth, input.dataset.key)) || '';
+  });
+  document.getElementById('inv-goal').value = localStorage.getItem(`budget_goal_${currentYear}`) || '';
 }
 
-function toast(msg) {
+function saveData() {
+  document.querySelectorAll('[data-key]').forEach(input => {
+    localStorage.setItem(storageKey(currentYear, currentMonth, input.dataset.key), input.value);
+  });
+  localStorage.setItem(`budget_goal_${currentYear}`, document.getElementById('inv-goal').value);
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2400);
+  t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2000);
 }
 
-// Reset done days on Monday
-const todayStr = new Date().toDateString();
-if (S.lastReset !== todayStr && new Date().getDay() === 1) {
-  S.doneDays = [];
-  S.lastReset = todayStr;
-  save();
+function init() {
+  const nav = document.getElementById('monthNav');
+  MONTHS.forEach((m, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'month-btn' + (i === currentMonth ? ' active' : '');
+    btn.textContent = m;
+    btn.onclick = () => {
+      saveData(); currentMonth = i;
+      document.querySelectorAll('.month-btn').forEach((b, idx) => b.classList.toggle('active', idx === i));
+      loadMonthValues(); renderDailyExpenses(); updateAll();
+    };
+    nav.appendChild(btn);
+  });
+  renderSections('rev'); renderSections('exp'); renderSections('inv');
+  rebuildDailyCategoryOptions(); renderDailyExpenses(); renderNeeds(); updateAll();
 }
 
-render();
+init();
 </script>
 </body>
 </html>
